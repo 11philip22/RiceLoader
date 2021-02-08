@@ -56,6 +56,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\Crypto++\Crypto++.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -99,10 +100,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cmd /c  $(SolutionDir)LoadRice.bat</Command>
+      <Command>cmd /c  $(ProjectDir)LoadRice.bat</Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>converts C:\Users\Philip\source\repos\DllShellSimple\Release\DLLShellSimple.dll into shellcode and then into UUIDS then place uuid header in Loader project</Message>
+      <Message>converts dll in shellcode and then into uuid header</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,10 +123,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cmd /c  $(SolutionDir)LoadRice.bat</Command>
+      <Command>cmd /c  $(ProjectDir)LoadRice.bat</Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>converts C:\Users\Philip\source\repos\DllShellSimple\Release\DLLShellSimple.dll into shellcode and then into UUIDS then place uuid header in Loader project</Message>
+      <Message>converts dll in shellcode and then into uuid header</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,10 +142,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cmd /c  $(SolutionDir)LoadRice.bat</Command>
+      <Command>cmd /c  $(ProjectDir)LoadRice.bat</Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>converts C:\Users\Philip\source\repos\DllShellSimple\Release\DLLShellSimple.dll into shellcode and then into UUIDS then place uuid header in Loader project</Message>
+      <Message>converts dll in shellcode and then into uuid header</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,17 +165,17 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>cmd /c  $(SolutionDir)LoadRice.bat</Command>
+      <Command>cmd /c  $(ProjectDir)LoadRice.bat</Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>converts C:\Users\Philip\source\repos\DllShellSimple\Release\DLLShellSimple.dll into shellcode and then into UUIDS then place uuid header in Loader project</Message>
+      <Message>converts dll in shellcode and then into uuid header</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Payload.h" />
+    <ClInclude Include="CryptPayload.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

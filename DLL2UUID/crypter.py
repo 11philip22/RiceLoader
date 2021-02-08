@@ -14,8 +14,9 @@ def encrypt(uuids):
 
     encrypted_uuids = []
     for uuid in uuids:
+        clean_uuid = uuid.strip('"')
         ct_bytes = cipher.encrypt(pad(
-            bytes(uuid, encoding='utf-8'),
+            bytes(clean_uuid, encoding='utf-8'),
             AES.block_size
         ))
         encrypted_uuids.append(generate_byte_file_string(ct_bytes))
