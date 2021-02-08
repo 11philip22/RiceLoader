@@ -74,7 +74,8 @@ int main()
 #ifdef _DEBUG
             printf("[-] UuidFromStringA() != S_OK\n");
 #endif
-            CloseHandle(ha);
+            if (ha)
+				CloseHandle(ha);
 
             return -1;
         }
