@@ -3,7 +3,7 @@ import argparse
 from ShellcodeRDI import *
 from ShellcodeToUUID import convert_to_uuid
 from typing import Iterable, Any, Tuple
-from crypter import encrypt
+from crypter import encrypt, xor_payload
 
 
 __version__ = '1.0'
@@ -55,6 +55,8 @@ def main():
             arguments.user_data.encode(),
             flags
         )
+    if arguments.crypt_header_file:
+        converted_dll = xor_payload(converted_dll)
 
     if arguments.bin_file:
         print('[+] Creating Shellcode: {}'.format(arguments.bin_file))

@@ -3,6 +3,7 @@
 // ReSharper disable CppClangTidyModernizeUseAuto
 // ReSharper disable CppCStyleCast
 // ReSharper disable CppClangTidyClangDiagnosticCastQual
+// ReSharper disable CppClangTidyClangDiagnosticOldStyleCast
 #include <iostream>
 #include <Windows.h>
 
@@ -68,7 +69,8 @@ int main()
 #ifdef _DEBUG
         printf("[+] %s\n", recoveredUuid.c_str());
 #endif
-    	
+
+    	// todo: xor uuid
         RPC_STATUS status = fUuidFromStringA((RPC_CSTR)recoveredUuid.c_str(), (UUID*)hptr);
         if (status != RPC_S_OK) {
 #ifdef _DEBUG
@@ -76,7 +78,6 @@ int main()
 #endif
             if (ha)
 				CloseHandle(ha);
-
             return -1;
         }
         hptr += 16;
