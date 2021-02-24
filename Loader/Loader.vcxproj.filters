@@ -23,5 +23,8 @@
     <ClInclude Include="CryptPayload.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GetProcAddressWithHash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

