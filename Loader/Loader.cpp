@@ -28,7 +28,7 @@ int main()
         if (!fUuidFromStringA)
         {
 #ifdef _DEBUG
-        	printf("[-] Unable to get proc address: UuidFromStringA\n")
+            printf("[-] Unable to get proc address: UuidFromStringA\n");
 #endif
         	return -1;
         }            
@@ -36,7 +36,7 @@ int main()
     else
     {
 #ifdef _DEBUG
-        printf("[-] Unable to load library: Rpcrt4.dll\n")
+        printf("[-] Unable to load library: Rpcrt4.dll\n");
 #endif
         return -1;
     }
