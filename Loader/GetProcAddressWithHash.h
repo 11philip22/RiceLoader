@@ -1,3 +1,4 @@
+// http://www.exploit-monday.com/2013/08/writing-optimized-windows-shellcode-in-c.html?m=1
 // ReSharper disable CppClangTidyClangDiagnosticOldStyleCast
 // ReSharper disable CppCStyleCast
 // ReSharper disable CppClangTidyCppcoreguidelinesMacroUsage
