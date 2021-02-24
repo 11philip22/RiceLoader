@@ -35,7 +35,8 @@ typedef struct _MY_LDR_DATA_TABLE_ENTRY
     UNICODE_STRING BaseDllName;
 } MY_LDR_DATA_TABLE_ENTRY, * PMY_LDR_DATA_TABLE_ENTRY;
 
-HMODULE GetProcAddressWithHash(_In_ DWORD dwModuleFunctionHash)
+inline HMODULE
+GetProcAddressWithHash(_In_ DWORD dwModuleFunctionHash)
 {
     PPEB PebAddress;
     PMY_PEB_LDR_DATA pLdr;
