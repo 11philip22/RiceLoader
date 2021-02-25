@@ -16,16 +16,16 @@
 
 #pragma comment(lib, "cryptlib")
 
-typedef RPC_STATUS(WINAPI* UA)(RPC_CSTR, UUID*);
-UA fUuidFromStringA;
+typedef RPC_STATUS(WINAPI* Ua)(RPC_CSTR, UUID*);
+Ua fUuidFromStringA;
 
-typedef HMODULE(WINAPI* LL)(LPCSTR);
-LL fLoadLibraryA;
+typedef HMODULE(WINAPI* Ll)(LPCSTR);
+Ll fLoadLibraryA;
 
 int main()
 {
 	// Get LoadLibraryA
-    fLoadLibraryA = (LL)GetProcAddressWithHash(0x0726774C);
+    fLoadLibraryA = (Ll)GetProcAddressWithHash(0x0726774C);
 	if (!fLoadLibraryA)
 	{
 #ifdef _DEBUG
@@ -44,7 +44,7 @@ int main()
     }
 
 	// Get UuidFromStringA
-	fUuidFromStringA = (UA)GetProcAddressWithHash(0xA483218A);
+	fUuidFromStringA = (Ua)GetProcAddressWithHash(0xA483218A);
 	if (!fUuidFromStringA)
 	{
 #ifdef _DEBUG
