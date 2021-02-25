@@ -5,7 +5,6 @@
 // ReSharper disable CppClangTidyBugproneMacroParentheses
 // ReSharper disable CppClangTidyClangDiagnosticCastAlign
 #pragma once
-#include <Windows.h>
 #include <winternl.h>
 
 // This compiles to a ROR instruction
